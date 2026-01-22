@@ -4,6 +4,15 @@ import { useRouter } from "next/navigation";
 import { mockOffers } from "@/lib/mockOffers";
 import TierBadge from "@/components/TierBadge";
 import { useState } from "react";
+import {
+  ArrowLeft,
+  MapPin,
+  Store,
+  Sparkles,
+  Camera,
+  Star,
+  Frown,
+} from "lucide-react";
 
 export default function OfferDetailsPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -15,7 +24,9 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
     return (
       <div className="flex min-h-screen items-center justify-center bg-black">
         <div className="text-center">
-          <div className="mb-4 text-6xl">😕</div>
+          <div className="mb-4 flex justify-center">
+            <Frown className="h-16 w-16 text-gray-400 opacity-50" />
+          </div>
           <h2 className="mb-2 text-xl font-bold text-white">Offer not found</h2>
           <button
             onClick={() => router.back()}
@@ -55,7 +66,7 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
           onClick={() => router.back()}
           className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 backdrop-blur-sm transition-all hover:bg-black/90"
         >
-          <span className="text-xl text-white">←</span>
+          <ArrowLeft className="h-5 w-5 text-white" />
         </button>
 
         {/* Value Badge */}
@@ -70,8 +81,8 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
       <div className="mx-auto max-w-lg px-6 pt-6">
         {/* Business Info */}
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-900 text-3xl">
-            {offer.businessLogo}
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-900">
+            <Store className="h-7 w-7 text-brand-cyan" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-white">
@@ -82,7 +93,10 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
               {offer.location && (
                 <>
                   <span>•</span>
-                  <span>📍 {offer.location}</span>
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {offer.location}
+                  </span>
                 </>
               )}
             </div>
@@ -151,7 +165,9 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
           </h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <span className="text-xl">✨</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-cyan/20">
+                <Sparkles className="h-4 w-4 text-brand-cyan" />
+              </div>
               <div>
                 <div className="font-semibold text-white">
                   Experience worth ${offer.estimatedValue}
@@ -162,7 +178,9 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-xl">📸</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-magenta/20">
+                <Camera className="h-4 w-4 text-brand-magenta" />
+              </div>
               <div>
                 <div className="font-semibold text-white">
                   Content Creation Opportunity
@@ -173,7 +191,9 @@ export default function OfferDetailsPage({ params }: { params: { id: string } })
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-xl">⭐</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-purple/20">
+                <Star className="h-4 w-4 text-brand-purple" />
+              </div>
               <div>
                 <div className="font-semibold text-white">
                   Build Your Portfolio

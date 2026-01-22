@@ -1,9 +1,27 @@
 import { getTierInfo, type TierLevel } from "@/lib/tiers";
+import {
+  Star,
+  Sparkles,
+  Zap,
+  Gem,
+  Flame,
+  Trophy,
+  LucideIcon,
+} from "lucide-react";
+
+const iconMap: Record<string, LucideIcon> = {
+  star: Star,
+  sparkles: Sparkles,
+  zap: Zap,
+  gem: Gem,
+  flame: Flame,
+  trophy: Trophy,
+};
 
 interface TierBadgeProps {
   tier: TierLevel;
   size?: "sm" | "md" | "lg" | "xl";
-  showEmoji?: boolean;
+  showIcon?: boolean;
   showLevel?: boolean;
   variant?: "default" | "outline" | "gradient";
   className?: string;
@@ -16,26 +34,27 @@ const sizeClasses = {
   xl: "text-lg px-6 py-3",
 };
 
-const emojiSizes = {
-  sm: "text-sm",
-  md: "text-base",
-  lg: "text-xl",
-  xl: "text-2xl",
+const iconSizes = {
+  sm: "h-3 w-3",
+  md: "h-4 w-4",
+  lg: "h-5 w-5",
+  xl: "h-6 w-6",
 };
 
 export default function TierBadge({
   tier,
   size = "md",
-  showEmoji = true,
+  showIcon = true,
   showLevel = false,
   variant = "default",
   className = "",
 }: TierBadgeProps) {
   const tierInfo = getTierInfo(tier);
+  const Icon = iconMap[tierInfo.icon] || Star;
 
   const baseClasses = "inline-flex items-center gap-2 rounded-full font-semibold transition-all";
   const sizeClass = sizeClasses[size];
-  const emojiSize = emojiSizes[size];
+  const iconSize = iconSizes[size];
 
   // Get tier color from CSS variables
   const getTierColorStyle = () => {
@@ -82,7 +101,7 @@ export default function TierBadge({
       role="status"
       aria-label={`Tier ${tier}: ${tierInfo.displayName}`}
     >
-      {showEmoji && <span className={emojiSize}>{tierInfo.emoji}</span>}
+      {showIcon && <Icon className={iconSize} />}
       <span>
         {showLevel && `Tier ${tier} - `}
         {tierInfo.displayName}

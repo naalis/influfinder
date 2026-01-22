@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Clock, Sparkles, PartyPopper, Heart } from "lucide-react";
 import CollabCard from "@/components/collabs/CollabCard";
 import { mockCollabs } from "@/lib/mockCollabs";
 
@@ -97,11 +98,11 @@ export default function CollabsPage() {
           </div>
         ) : (
           <div className="flex min-h-[40vh] flex-col items-center justify-center text-center">
-            <div className="mb-4 text-6xl opacity-30">
-              {selectedFilter === "pending" && "⏳"}
-              {selectedFilter === "active" && "✨"}
-              {selectedFilter === "completed" && "🎉"}
-              {selectedFilter === "all" && "❤️"}
+            <div className="mb-4 opacity-30">
+              {selectedFilter === "pending" && <Clock className="h-16 w-16 text-yellow-400" />}
+              {selectedFilter === "active" && <Sparkles className="h-16 w-16 text-brand-cyan" />}
+              {selectedFilter === "completed" && <PartyPopper className="h-16 w-16 text-green-400" />}
+              {selectedFilter === "all" && <Heart className="h-16 w-16 text-brand-magenta" />}
             </div>
             <h3 className="mb-2 text-xl font-bold text-white">
               No {selectedFilter !== "all" && selectedFilter} collaborations

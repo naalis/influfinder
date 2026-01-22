@@ -21,7 +21,7 @@ export default function WelcomePage() {
               : "opacity-0 translate-y-10"
           }`}
         >
-          {/* Logo */}
+          {/* Logo (includes isotipo) */}
           <div className="mb-8">
             <img
               src="/logo-white.png"
@@ -45,7 +45,7 @@ export default function WelcomePage() {
         }`}
       >
         <Link
-          href="/onboarding/login"
+          href="/onboarding/select-type"
           className="block w-full rounded-full bg-white px-8 py-4 text-center text-lg font-semibold text-black transition-all hover:scale-105 active:scale-95"
         >
           Get Started

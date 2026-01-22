@@ -1,5 +1,35 @@
 import Link from "next/link";
+import { ComponentType } from "react";
+import { Clock, Sparkles, CheckCircle } from "lucide-react";
 import type { Collaboration } from "@/lib/mockCollabs";
+import {
+  AllCategoriesIcon,
+  DiningIcon,
+  FitnessIcon,
+  WellnessIcon,
+  FashionIcon,
+  TravelIcon,
+  BeautyIcon,
+  TechIcon,
+  HomeIcon,
+} from "@/components/brand/BrandIcons";
+
+interface IconComponentProps {
+  className?: string;
+  size?: number;
+  color?: string;
+}
+
+const businessIconMap: Record<string, ComponentType<IconComponentProps>> = {
+  dining: DiningIcon,
+  fitness: FitnessIcon,
+  wellness: WellnessIcon,
+  fashion: FashionIcon,
+  travel: TravelIcon,
+  beauty: BeautyIcon,
+  tech: TechIcon,
+  home: HomeIcon,
+};
 
 interface CollabCardProps {
   collab: Collaboration;
@@ -11,26 +41,27 @@ const statusConfig = {
     bgColor: "bg-yellow-400/10",
     borderColor: "border-yellow-400/30",
     label: "Pending",
-    icon: "⏳",
+    Icon: Clock,
   },
   active: {
     color: "text-brand-cyan",
     bgColor: "bg-brand-cyan/10",
     borderColor: "border-brand-cyan/30",
     label: "Active",
-    icon: "✨",
+    Icon: Sparkles,
   },
   completed: {
     color: "text-green-400",
     bgColor: "bg-green-400/10",
     borderColor: "border-green-400/30",
     label: "Completed",
-    icon: "✓",
+    Icon: CheckCircle,
   },
 };
 
 export default function CollabCard({ collab }: CollabCardProps) {
   const config = statusConfig[collab.status];
+  const BusinessIcon = businessIconMap[collab.businessLogo] || AllCategoriesIcon;
 
   return (
     <Link href={`/collab/${collab.id}`}>
@@ -48,7 +79,7 @@ export default function CollabCard({ collab }: CollabCardProps) {
 
           {/* Status Badge */}
           <div className={`absolute right-3 top-3 flex items-center gap-1.5 rounded-full ${config.bgColor} border ${config.borderColor} px-3 py-1.5 backdrop-blur-sm`}>
-            <span className="text-sm">{config.icon}</span>
+            <config.Icon className={`h-3.5 w-3.5 ${config.color}`} />
             <span className={`text-xs font-semibold ${config.color}`}>
               {config.label}
             </span>
@@ -66,7 +97,9 @@ export default function CollabCard({ collab }: CollabCardProps) {
         <div className="p-4">
           {/* Business Info */}
           <div className="mb-2 flex items-center gap-2">
-            <span className="text-xl">{collab.businessLogo}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-800">
+              <BusinessIcon size={16} color="#75FBDE" />
+            </div>
             <span className="text-sm font-semibold text-gray-300">
               {collab.businessName}
             </span>

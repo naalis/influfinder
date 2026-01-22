@@ -1,3 +1,5 @@
+import { Search } from "lucide-react";
+
 export default function ExplorePage() {
   return (
     <div className="min-h-screen p-6">
@@ -13,7 +15,9 @@ export default function ExplorePage() {
         {/* Coming Soon Placeholder */}
         <div className="flex min-h-[60vh] items-center justify-center rounded-2xl border border-gray-800 bg-gradient-to-br from-brand-blue/10 to-brand-magenta/10 p-8">
           <div className="text-center">
-            <div className="mb-4 text-6xl">🔍</div>
+            <div className="mb-4 flex justify-center">
+              <Search className="h-16 w-16 text-gray-400 opacity-50" />
+            </div>
             <h2 className="mb-2 text-2xl font-bold">Explore</h2>
             <p className="text-gray-400">
               Search and filter opportunities coming soon

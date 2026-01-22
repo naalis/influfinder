@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Search } from "lucide-react";
 import TierBadge from "@/components/TierBadge";
 import OfferCard from "@/components/offers/OfferCard";
 import CategoryFilter from "@/components/offers/CategoryFilter";
@@ -24,9 +25,12 @@ export default function HomePage() {
         );
 
   return (
-    <div className="min-h-screen bg-black pb-6">
+    <div className="relative min-h-screen bg-black pb-6">
+      {/* Subtle gradient overlay */}
+      <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-brand-purple/10 via-transparent to-transparent" />
+
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-gray-800 bg-black/95 p-6 backdrop-blur-lg">
+      <header className="sticky top-0 z-10 border-b border-gray-800/50 bg-black/90 p-6 backdrop-blur-xl">
         <div className="mx-auto max-w-lg">
           {/* Logo */}
           <div className="mb-4">
@@ -40,7 +44,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="mb-1 text-xl font-bold text-white">
-                Hey, {userName}! 👋
+                Hey, {userName}!
               </h1>
               <p className="text-sm text-gray-400">
                 Discover amazing opportunities
@@ -52,7 +56,7 @@ export default function HomePage() {
       </header>
 
       {/* Category Filters */}
-      <div className="sticky top-[120px] z-10 bg-black/95 py-4 backdrop-blur-lg">
+      <div className="sticky top-[120px] z-10 bg-black/90 py-4 backdrop-blur-xl">
         <div className="mx-auto max-w-lg">
           <CategoryFilter
             categories={categories}
@@ -63,26 +67,28 @@ export default function HomePage() {
       </div>
 
       {/* Offers Feed */}
-      <div className="mx-auto max-w-lg space-y-4 px-6">
+      <div className="relative z-0 mx-auto max-w-lg space-y-4 px-6">
         {/* Stats Bar */}
-        <div className="flex items-center justify-between rounded-2xl border border-gray-800 bg-gray-900/50 p-4">
+        <div className="flex items-center justify-between rounded-2xl border border-brand-cyan/20 bg-gradient-to-r from-brand-cyan/5 via-brand-purple/5 to-brand-magenta/5 p-4">
           <div>
             <div className="text-2xl font-bold text-brand-cyan">
               {filteredOffers.length}
             </div>
-            <div className="text-xs text-gray-500">Available Offers</div>
+            <div className="text-xs text-gray-400">Available</div>
           </div>
+          <div className="h-8 w-px bg-gray-800" />
           <div>
             <div className="text-2xl font-bold text-brand-magenta">
               ${filteredOffers.reduce((sum, offer) => sum + offer.estimatedValue, 0).toLocaleString()}
             </div>
-            <div className="text-xs text-gray-500">Total Value</div>
+            <div className="text-xs text-gray-400">Total Value</div>
           </div>
+          <div className="h-8 w-px bg-gray-800" />
           <div>
             <div className="text-2xl font-bold text-brand-purple">
               {filteredOffers.reduce((sum, offer) => sum + offer.applicants, 0)}
             </div>
-            <div className="text-xs text-gray-500">Applicants</div>
+            <div className="text-xs text-gray-400">Applied</div>
           </div>
         </div>
 
@@ -95,7 +101,9 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="flex min-h-[40vh] flex-col items-center justify-center text-center">
-            <div className="mb-4 text-6xl opacity-30">🔍</div>
+            <div className="mb-4">
+              <Search className="h-16 w-16 text-brand-cyan/30" />
+            </div>
             <h3 className="mb-2 text-xl font-bold text-white">
               No offers found
             </h3>
@@ -105,9 +113,9 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Load More Button (UI only) */}
+        {/* Load More Button */}
         {filteredOffers.length > 0 && (
-          <button className="w-full rounded-2xl border-2 border-gray-800 bg-transparent py-4 text-center font-semibold text-gray-400 transition-all hover:border-gray-700 hover:bg-gray-900">
+          <button className="w-full rounded-2xl border border-brand-cyan/30 bg-brand-cyan/5 py-4 text-center font-semibold text-brand-cyan transition-all hover:border-brand-cyan/50 hover:bg-brand-cyan/10">
             Load More Offers
           </button>
         )}

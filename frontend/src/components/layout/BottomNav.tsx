@@ -2,38 +2,34 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Home, Search, Heart, User, LucideIcon } from "lucide-react";
 
 interface NavItem {
   href: string;
   label: string;
-  icon: string;
-  activeIcon: string;
+  Icon: LucideIcon;
 }
 
 const navItems: NavItem[] = [
   {
     href: "/home",
     label: "Home",
-    icon: "🏠",
-    activeIcon: "🏠",
+    Icon: Home,
   },
   {
     href: "/explore",
     label: "Explore",
-    icon: "🔍",
-    activeIcon: "🔍",
+    Icon: Search,
   },
   {
     href: "/collabs",
     label: "Collabs",
-    icon: "❤️",
-    activeIcon: "❤️",
+    Icon: Heart,
   },
   {
     href: "/profile",
     label: "Profile",
-    icon: "👤",
-    activeIcon: "👤",
+    Icon: User,
   },
 ];
 
@@ -59,19 +55,19 @@ export default function BottomNav() {
                 isActive ? "text-brand-cyan" : "text-gray-400"
               }`}
             >
-              <span
-                className="text-2xl transition-transform duration-200"
+              <item.Icon
+                className={`h-6 w-6 transition-transform duration-200 ${
+                  isActive ? "scale-110" : ""
+                }`}
                 style={
                   isActive
                     ? {
                         filter: "drop-shadow(0 0 8px var(--brand-cyan))",
-                        transform: "scale(1.1)",
                       }
                     : {}
                 }
-              >
-                {isActive ? item.activeIcon : item.icon}
-              </span>
+                fill={isActive ? "currentColor" : "none"}
+              />
               <span
                 className={`text-xs font-medium transition-all ${
                   isActive ? "font-semibold" : ""

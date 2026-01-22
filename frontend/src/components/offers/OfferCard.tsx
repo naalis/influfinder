@@ -1,11 +1,43 @@
 import Link from "next/link";
+import { ComponentType } from "react";
 import type { Offer } from "@/lib/mockOffers";
+import { MapPin } from "lucide-react";
+import {
+  AllCategoriesIcon,
+  DiningIcon,
+  FitnessIcon,
+  WellnessIcon,
+  FashionIcon,
+  TravelIcon,
+  BeautyIcon,
+  TechIcon,
+  HomeIcon,
+} from "@/components/brand/BrandIcons";
+
+interface IconComponentProps {
+  className?: string;
+  size?: number;
+  color?: string;
+}
+
+const iconMap: Record<string, ComponentType<IconComponentProps>> = {
+  dining: DiningIcon,
+  fitness: FitnessIcon,
+  wellness: WellnessIcon,
+  fashion: FashionIcon,
+  travel: TravelIcon,
+  beauty: BeautyIcon,
+  tech: TechIcon,
+  home: HomeIcon,
+};
 
 interface OfferCardProps {
   offer: Offer;
 }
 
 export default function OfferCard({ offer }: OfferCardProps) {
+  const Icon = iconMap[offer.businessLogo] || AllCategoriesIcon;
+
   return (
     <Link href={`/offer/${offer.id}`}>
       <div className="group overflow-hidden rounded-2xl bg-gray-900 transition-all hover:scale-[1.02] active:scale-[0.98]">
@@ -37,7 +69,9 @@ export default function OfferCard({ offer }: OfferCardProps) {
         <div className="p-4">
           {/* Business Info */}
           <div className="mb-2 flex items-center gap-2">
-            <span className="text-2xl">{offer.businessLogo}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-800">
+              <Icon size={16} color="#75FBDE" />
+            </div>
             <span className="text-sm font-semibold text-gray-300">
               {offer.businessName}
             </span>
@@ -58,7 +92,8 @@ export default function OfferCard({ offer }: OfferCardProps) {
             <div className="flex items-center gap-4 text-xs text-gray-500">
               {offer.location && (
                 <span className="flex items-center gap-1">
-                  📍 {offer.location}
+                  <MapPin className="h-3 w-3" />
+                  {offer.location}
                 </span>
               )}
             </div>

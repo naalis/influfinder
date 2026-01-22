@@ -1,0 +1,17 @@
+export const industries = [
+  { id: "food", label: "Food & Beverage" },
+  { id: "fashion", label: "Fashion & Apparel" },
+  { id: "beauty", label: "Beauty & Cosmetics" },
+  { id: "fitness", label: "Fitness & Sports" },
+  { id: "tech", label: "Technology" },
+  { id: "travel", label: "Travel & Hospitality" },
+  { id: "health", label: "Health & Wellness" },
+  { id: "entertainment", label: "Entertainment" },
+  { id: "home", label: "Home & Decor" },
+  { id: "automotive", label: "Automotive" },
+  { id: "finance", label: "Finance & Insurance" },
+  { id: "education", label: "Education" },
+  { id: "retail", label: "Retail" },
+  { id: "services", label: "Professional Services" },
+  { id: "other", label: "Other" },
+];

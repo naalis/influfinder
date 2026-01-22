@@ -3,6 +3,7 @@
 import TierBadge from "@/components/TierBadge";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Isotipo } from "@/components/brand";
 
 export default function OnboardingSuccessPage() {
   const [mounted, setMounted] = useState(false);
@@ -13,25 +14,12 @@ export default function OnboardingSuccessPage() {
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black p-6">
-      {/* Animated confetti-like background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className={`absolute animate-pulse`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
-            }}
-          >
-            <span className="text-2xl opacity-30">
-              {["✨", "🎉", "⭐", "💫", "🌟"][Math.floor(Math.random() * 5)]}
-            </span>
-          </div>
-        ))}
-      </div>
+      {/* Gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-magenta/20 via-brand-purple/30 to-brand-cyan/20" />
+
+      {/* Subtle glow effects */}
+      <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-brand-cyan/20 blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-brand-magenta/20 blur-3xl" />
 
       {/* Main Content */}
       <div
@@ -39,48 +27,55 @@ export default function OnboardingSuccessPage() {
           mounted ? "opacity-100 scale-100" : "opacity-0 scale-90"
         }`}
       >
-        {/* Welcome Badge */}
+        {/* Welcome Badge with Isotipo */}
         <div className="mb-8">
-          <div className="mb-6 text-8xl">🎊</div>
-          <h1 className="mb-4 text-4xl font-bold text-white">
+          <div className="mb-6 flex justify-center">
+            <div className="rounded-full bg-gradient-to-br from-brand-cyan/20 to-brand-magenta/20 p-4">
+              <Isotipo size={72} variant="gradient" />
+            </div>
+          </div>
+          <h1 className="mb-4 bg-gradient-to-r from-brand-cyan via-white to-brand-magenta bg-clip-text text-4xl font-bold text-transparent">
             Welcome to Influfinder!
           </h1>
-          <p className="mb-8 text-lg text-gray-400">
+          <p className="mb-8 text-lg text-gray-300">
             You&apos;re all set to start your creator journey
           </p>
         </div>
 
         {/* Tier Card */}
         <div
-          className={`mx-auto mb-8 max-w-md rounded-2xl border-2 border-brand-cyan/30 bg-gradient-to-br from-gray-900 to-black p-8 transition-all duration-1000 delay-300 ${
+          className={`mx-auto mb-8 max-w-md overflow-hidden rounded-2xl border border-brand-purple/30 bg-gray-900/80 backdrop-blur-sm transition-all duration-1000 delay-300 ${
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          <div className="mb-4 text-sm font-semibold uppercase tracking-wide text-brand-cyan">
-            Your Starting Tier
-          </div>
-
-          <div className="mb-6 flex justify-center">
-            <TierBadge tier={0} size="xl" variant="gradient" />
-          </div>
-
-          <p className="mb-6 text-gray-400">
-            Complete your first collaborations to level up and unlock exclusive opportunities
-          </p>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 rounded-xl border border-gray-800 bg-gray-900/50 p-4">
-            <div>
-              <div className="mb-1 text-2xl font-bold text-brand-cyan">0</div>
-              <div className="text-xs text-gray-500">Collabs</div>
+          {/* Card header gradient */}
+          <div className="bg-gradient-to-r from-brand-cyan/10 via-brand-purple/10 to-brand-magenta/10 p-8">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-wide text-brand-cyan">
+              Your Starting Tier
             </div>
-            <div>
-              <div className="mb-1 text-2xl font-bold text-brand-purple">0</div>
-              <div className="text-xs text-gray-500">Karma</div>
+
+            <div className="mb-6 flex justify-center">
+              <TierBadge tier={0} size="xl" variant="gradient" />
             </div>
-            <div>
-              <div className="mb-1 text-2xl font-bold text-brand-magenta">$0</div>
-              <div className="text-xs text-gray-500">Saved</div>
+
+            <p className="mb-6 text-gray-300">
+              Complete your first collaborations to level up and unlock exclusive opportunities
+            </p>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-3 gap-4 rounded-xl border border-gray-700/50 bg-black/50 p-4">
+              <div>
+                <div className="mb-1 text-2xl font-bold text-brand-cyan">0</div>
+                <div className="text-xs text-gray-400">Collabs</div>
+              </div>
+              <div>
+                <div className="mb-1 text-2xl font-bold text-brand-purple">0</div>
+                <div className="text-xs text-gray-400">Karma</div>
+              </div>
+              <div>
+                <div className="mb-1 text-2xl font-bold text-brand-magenta">$0</div>
+                <div className="text-xs text-gray-400">Saved</div>
+              </div>
             </div>
           </div>
         </div>
@@ -93,24 +88,17 @@ export default function OnboardingSuccessPage() {
         >
           <Link
             href="/home"
-            className="block w-full max-w-md mx-auto rounded-full bg-brand-cyan px-8 py-4 text-center font-semibold text-black transition-all hover:scale-105 active:scale-95"
+            className="block w-full max-w-md mx-auto rounded-full bg-gradient-to-r from-brand-cyan via-brand-purple to-brand-magenta px-8 py-4 text-center font-semibold text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-brand-purple/30 active:scale-95"
           >
             Explore Opportunities
           </Link>
 
           <Link
             href="/profile"
-            className="block w-full max-w-md mx-auto rounded-full border-2 border-gray-700 bg-transparent px-8 py-4 text-center font-semibold text-white transition-all hover:border-gray-600 hover:bg-gray-900 active:scale-95"
+            className="block w-full max-w-md mx-auto rounded-full border border-brand-cyan/50 bg-transparent px-8 py-4 text-center font-semibold text-brand-cyan transition-all hover:border-brand-cyan hover:bg-brand-cyan/10 active:scale-95"
           >
             View My Profile
           </Link>
-        </div>
-
-        {/* Progress Indicator */}
-        <div className="mt-8 flex justify-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-brand-cyan"></div>
-          <div className="h-2 w-2 rounded-full bg-brand-cyan"></div>
-          <div className="h-2 w-2 rounded-full bg-brand-cyan"></div>
         </div>
       </div>
     </div>

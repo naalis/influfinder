@@ -14,7 +14,7 @@ export interface TierInfo {
   colorDark: string;
   description: string;
   minCollabs: number;
-  emoji: string;
+  icon: string;
 }
 
 export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
@@ -27,7 +27,7 @@ export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
     colorDark: "tier-0-dark",
     description: "Just getting started on your creator journey",
     minCollabs: 0,
-    emoji: "🌟",
+    icon: "star",
   },
   1: {
     level: 1,
@@ -38,7 +38,7 @@ export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
     colorDark: "tier-1-dark",
     description: "Building your presence with fresh collaborations",
     minCollabs: 3,
-    emoji: "💫",
+    icon: "sparkles",
   },
   2: {
     level: 2,
@@ -49,7 +49,7 @@ export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
     colorDark: "tier-2-dark",
     description: "Established creator with consistent impact",
     minCollabs: 10,
-    emoji: "⚡",
+    icon: "zap",
   },
   3: {
     level: 3,
@@ -60,7 +60,7 @@ export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
     colorDark: "tier-3-dark",
     description: "Premium influencer with exclusive opportunities",
     minCollabs: 25,
-    emoji: "💎",
+    icon: "gem",
   },
   4: {
     level: 4,
@@ -71,7 +71,7 @@ export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
     colorDark: "tier-4-dark",
     description: "Top-tier creator with powerful influence",
     minCollabs: 50,
-    emoji: "🔥",
+    icon: "flame",
   },
   5: {
     level: 5,
@@ -82,7 +82,7 @@ export const TIER_CONFIG: Record<TierLevel, TierInfo> = {
     colorDark: "tier-5-dark",
     description: "Legendary creator - pinnacle of achievement",
     minCollabs: 100,
-    emoji: "🏆",
+    icon: "trophy",
   },
 };
 
