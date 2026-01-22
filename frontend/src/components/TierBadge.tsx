@@ -37,27 +37,48 @@ export default function TierBadge({
   const sizeClass = sizeClasses[size];
   const emojiSize = emojiSizes[size];
 
-  let variantClasses = "";
-  let textColor = "text-white";
+  // Get tier color from CSS variables
+  const getTierColorStyle = () => {
+    const colorVar = `var(--tier-${tier})`;
+    const colorLightVar = `var(--tier-${tier}-light)`;
+    const colorDarkVar = `var(--tier-${tier}-dark)`;
 
-  switch (variant) {
-    case "default":
-      variantClasses = `bg-${tierInfo.color}`;
-      textColor = tier === 5 ? "text-gray-300" : "text-white";
-      break;
-    case "outline":
-      variantClasses = `border-2 border-${tierInfo.color} bg-transparent`;
-      textColor = `text-${tierInfo.color}`;
-      break;
-    case "gradient":
-      variantClasses = `bg-gradient-to-r from-${tierInfo.color} to-${tierInfo.colorDark}`;
-      textColor = tier === 5 ? "text-gray-300" : "text-white";
-      break;
-  }
+    switch (variant) {
+      case "default":
+        return {
+          backgroundColor: colorVar,
+          color: tier === 0 ? "#1f2937" : "#ffffff",
+        };
+      case "outline":
+        return {
+          border: `2px solid ${colorVar}`,
+          backgroundColor: "transparent",
+          color: colorVar,
+        };
+      case "gradient":
+        // Special gradient for Tier 5 (Legend)
+        if (tier === 5) {
+          return {
+            backgroundImage: `linear-gradient(135deg, ${colorVar} 0%, ${colorLightVar} 100%)`,
+            color: "#ffffff",
+          };
+        }
+        return {
+          backgroundImage: `linear-gradient(135deg, ${colorVar} 0%, ${colorDarkVar} 100%)`,
+          color: tier === 0 ? "#1f2937" : "#ffffff",
+        };
+      default:
+        return {
+          backgroundColor: colorVar,
+          color: "#ffffff",
+        };
+    }
+  };
 
   return (
     <div
-      className={`${baseClasses} ${sizeClass} ${variantClasses} ${textColor} ${className}`}
+      className={`${baseClasses} ${sizeClass} ${className}`}
+      style={getTierColorStyle()}
       role="status"
       aria-label={`Tier ${tier}: ${tierInfo.displayName}`}
     >
