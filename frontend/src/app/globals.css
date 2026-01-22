@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Tier 0 - Newbie (Slate/Gray) */
+  --tier-0: #64748b;
+  --tier-0-light: #94a3b8;
+  --tier-0-dark: #475569;
+
+  /* Tier 1 - Explorer (Bronze/Orange) */
+  --tier-1: #ea580c;
+  --tier-1-light: #fb923c;
+  --tier-1-dark: #c2410c;
+
+  /* Tier 2 - Pro (Silver/Teal) */
+  --tier-2: #14b8a6;
+  --tier-2-light: #5eead4;
+  --tier-2-dark: #0d9488;
+
+  /* Tier 3 - Elite (Gold) */
+  --tier-3: #eab308;
+  --tier-3-light: #fde047;
+  --tier-3-dark: #ca8a04;
+
+  /* Tier 4 - Master (Platinum/Iridescent) */
+  --tier-4: #a855f7;
+  --tier-4-light: #c084fc;
+  --tier-4-dark: #9333ea;
+
+  /* Tier 5 - Legend (Black/Obsidian) */
+  --tier-5: #1e293b;
+  --tier-5-light: #334155;
+  --tier-5-dark: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Tier Colors */
+  --color-tier-0: var(--tier-0);
+  --color-tier-0-light: var(--tier-0-light);
+  --color-tier-0-dark: var(--tier-0-dark);
+
+  --color-tier-1: var(--tier-1);
+  --color-tier-1-light: var(--tier-1-light);
+  --color-tier-1-dark: var(--tier-1-dark);
+
+  --color-tier-2: var(--tier-2);
+  --color-tier-2-light: var(--tier-2-light);
+  --color-tier-2-dark: var(--tier-2-dark);
+
+  --color-tier-3: var(--tier-3);
+  --color-tier-3-light: var(--tier-3-light);
+  --color-tier-3-dark: var(--tier-3-dark);
+
+  --color-tier-4: var(--tier-4);
+  --color-tier-4-light: var(--tier-4-light);
+  --color-tier-4-dark: var(--tier-4-dark);
+
+  --color-tier-5: var(--tier-5);
+  --color-tier-5-light: var(--tier-5-light);
+  --color-tier-5-dark: var(--tier-5-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
