@@ -19,6 +19,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+// Format number consistently to avoid hydration mismatch
+function formatNumber(num: number): string {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export default function ProfilePage() {
   // Example user data
   const userCollabs = 7;
@@ -86,7 +91,7 @@ export default function ProfilePage() {
             <div className="text-xs text-gray-500">Karma</div>
           </div>
           <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
-            <div className="mb-1 text-xl font-bold text-brand-purple">{userReach.toLocaleString()}</div>
+            <div className="mb-1 text-xl font-bold text-brand-purple">{formatNumber(userReach)}</div>
             <div className="text-xs text-gray-500">Reach</div>
           </div>
           <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
