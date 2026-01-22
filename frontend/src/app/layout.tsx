@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Influfinder - Creator App",
   description: "Connect creators with brands for authentic collaborations",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/icon-192.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

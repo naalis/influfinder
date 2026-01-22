@@ -21,12 +21,14 @@ export default function WelcomePage() {
               : "opacity-0 translate-y-10"
           }`}
         >
-          {/* Logo placeholder - will be replaced with actual logo */}
-          <div className="mb-6 text-8xl">🔍</div>
-
-          <h1 className="mb-3 text-5xl font-bold text-white font-display">
-            INFLUfinder
-          </h1>
+          {/* Logo */}
+          <div className="mb-8">
+            <img
+              src="/logo-white.png"
+              alt="Influfinder"
+              className="mx-auto w-64"
+            />
+          </div>
 
           <p className="text-xl text-white/90 max-w-sm mx-auto">
             Making <span className="font-display italic">collaborations</span> simple

@@ -28,9 +28,18 @@ export default function HomePage() {
       {/* Header */}
       <header className="sticky top-0 z-10 border-b border-gray-800 bg-black/95 p-6 backdrop-blur-lg">
         <div className="mx-auto max-w-lg">
-          <div className="mb-3 flex items-center justify-between">
+          {/* Logo */}
+          <div className="mb-4">
+            <img
+              src="/logo-white.png"
+              alt="Influfinder"
+              className="h-8 w-auto"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="mb-1 text-2xl font-bold text-white">
+              <h1 className="mb-1 text-xl font-bold text-white">
                 Hey, {userName}! 👋
               </h1>
               <p className="text-sm text-gray-400">
