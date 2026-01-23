@@ -1,3 +1,7 @@
+"use client";
+
+import { useId } from "react";
+
 interface IsotipoProps {
   className?: string;
   size?: number;
@@ -9,7 +13,8 @@ export default function Isotipo({
   size = 40,
   variant = "gradient",
 }: IsotipoProps) {
-  const gradientId = `isotipo-gradient-${Math.random().toString(36).slice(2)}`;
+  const id = useId();
+  const gradientId = `isotipo-gradient-${id}`;
 
   return (
     <svg
