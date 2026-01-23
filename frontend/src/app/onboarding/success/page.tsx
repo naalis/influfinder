@@ -73,8 +73,8 @@ export default function OnboardingSuccessPage() {
                 <div className="text-xs text-gray-400">Karma</div>
               </div>
               <div>
-                <div className="mb-1 text-2xl font-bold text-brand-magenta">$0</div>
-                <div className="text-xs text-gray-400">Saved</div>
+                <div className="mb-1 text-2xl font-bold text-brand-magenta">0</div>
+                <div className="text-xs text-gray-400">Exchanges</div>
               </div>
             </div>
           </div>
