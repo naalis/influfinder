@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ComponentType } from "react";
-import { Clock, Sparkles, CheckCircle } from "lucide-react";
+import { Clock, Sparkles, CheckCircle, Gift } from "lucide-react";
 import type { Collaboration } from "@/lib/mockCollabs";
 import {
   AllCategoriesIcon,
@@ -85,11 +85,10 @@ export default function CollabCard({ collab }: CollabCardProps) {
             </span>
           </div>
 
-          {/* Value Badge */}
-          <div className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 backdrop-blur-sm">
-            <span className="text-xs font-semibold text-brand-cyan">
-              ${collab.value}
-            </span>
+          {/* What You Get Badge */}
+          <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-brand-cyan px-3 py-1.5 backdrop-blur-sm">
+            <Gift className="h-3 w-3 text-black" />
+            <span className="text-xs font-bold text-black">FREE</span>
           </div>
         </div>
 
@@ -106,9 +105,20 @@ export default function CollabCard({ collab }: CollabCardProps) {
           </div>
 
           {/* Title */}
-          <h3 className="mb-3 line-clamp-1 text-lg font-bold text-white">
+          <h3 className="mb-2 line-clamp-1 text-lg font-bold text-white">
             {collab.title}
           </h3>
+
+          {/* What You Get & Content Required */}
+          <div className="mb-3 flex flex-col gap-1 text-xs">
+            <div className="flex items-center gap-1.5 text-brand-cyan">
+              <Gift className="h-3 w-3" />
+              <span className="line-clamp-1">{collab.whatYouGet}</span>
+            </div>
+            <div className="text-gray-500">
+              Content: {collab.contentRequired}
+            </div>
+          </div>
 
           {/* Dates and Action */}
           <div className="space-y-2">
