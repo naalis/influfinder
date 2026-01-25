@@ -1,21 +1,25 @@
-"""Authentication endpoints"""
-from fastapi import APIRouter, HTTPException, Depends, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, timedelta
-from app.schemas import (
-    UserRegisterEmail, UserRegisterOAuth, UserLoginEmail, UserLoginOAuth,
-    TokenResponse, VerifyEmailRequest, ResendVerificationEmail,
-    ForgotPasswordRequest, ResetPasswordRequest, ChangePasswordRequest
-)
-from app.models import User
-from app.security import SecurityService, OAuthService
-from app.database import get_db
-from app.services.auth_service import AuthService
-from app.services.email_service import EmailService
-from app.utils.dependencies import get_current_user
-import secrets
+"""API v1 endpoints"""
+# Auth endpoints (TODO: Enable when fully implemented)
+# from app.api.v1.auth import router as auth_router
 
-router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
+# Active endpoints
+from app.api.v1.health import router as health_router
+from app.api.v1.offers import router as offers_router
+from app.api.v1.collaborations import router as collaborations_router
+from app.api.v1.submissions import router as submissions_router
+from app.api.v1.notifications import router as notifications_router
+from app.api.v1.messages import router as messages_router
+
+__all__ = [
+    # "auth_router",
+    "health_router",
+    "offers_router",
+    "collaborations_router",
+    "submissions_router",
+    "notifications_router",
+    "messages_router",
+]
+
 
 # ============ REGISTRO ============
 
