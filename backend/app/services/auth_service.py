@@ -2,8 +2,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from datetime import datetime, timedelta
-from app.models import User, Profile
-from app.models.user import UserType, AuthProvider
+from app.models import User, Profile, UserType, AuthProvider
 from app.schemas import UserRegisterEmail, UserRegisterOAuth
 from app.security import SecurityService
 from app.database import AsyncSessionLocal

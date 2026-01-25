@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime
 from app.models.collaboration import Application, ApplicationStatus, Collaboration
-from app.models.user import Profile
+from app.models import Profile
 from app.schemas.collaboration import ApplicationCreate
 
 class CollaborationService:
