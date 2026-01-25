@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://influfinder:password@localhost:5432/influfinder"
+    DATABASE_URL: str = "postgresql+asyncpg://influfinder:influfinder_password@postgres:5432/influfinder"
     SQLALCHEMY_ECHO: bool = False
     
     # JWT
@@ -49,7 +49,7 @@ class Settings(BaseSettings):
     AWS_S3_REGION: str = "us-east-1"
     
     # Redis
-    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_URL: str = "redis://redis:6379"
     
     # OpenAI
     OPENAI_API_KEY: str = ""
