@@ -17,10 +17,17 @@ from app.api.v1.health import router as health_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    await init_db()
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"Warning: Could not initialize database on startup: {e}")
+        print("The app will start anyway, but database operations may fail")
     yield
     # Shutdown
-    await close_db()
+    try:
+        await close_db()
+    except Exception as e:
+        print(f"Warning: Could not close database connection: {e}")
 
 # Create FastAPI app
 app = FastAPI(
