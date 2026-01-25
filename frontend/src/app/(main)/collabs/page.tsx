@@ -8,27 +8,33 @@ import {
   CheckCircle,
   Mail,
   Send,
+  XCircle,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import CollabCard from "@/components/collabs/CollabCard";
 import {
   mockCollabs,
-  getCollabCategory,
-  type CollabCategory,
+  getCollabTab,
+  isVipInfluencer,
+  currentUserType,
+  type CollabTab,
 } from "@/lib/mockCollabs";
 
-type TabFilter = "all" | CollabCategory;
+type TabFilter = CollabTab | "all";
 
-const tabs: { id: TabFilter; label: string; icon: React.ReactNode; color: string }[] = [
+const baseTabs: { id: TabFilter; label: string; icon: React.ReactNode; color: string; vipOnly?: boolean }[] = [
   {
-    id: "all",
-    label: "All",
-    icon: <Sparkles className="h-4 w-4" />,
-    color: "brand-cyan",
+    id: "invitations",
+    label: "Invitations",
+    icon: <Mail className="h-4 w-4" />,
+    color: "brand-magenta",
+    vipOnly: true,
   },
   {
-    id: "pending",
-    label: "Pending",
-    icon: <Clock className="h-4 w-4" />,
+    id: "applied",
+    label: "Applied",
+    icon: <Send className="h-4 w-4" />,
     color: "yellow-400",
   },
   {
@@ -52,37 +58,51 @@ const tabs: { id: TabFilter; label: string; icon: React.ReactNode; color: string
 ];
 
 export default function CollabsPage() {
-  const [selectedTab, setSelectedTab] = useState<TabFilter>("all");
+  const [selectedTab, setSelectedTab] = useState<TabFilter>("active");
+  const [showDeclined, setShowDeclined] = useState(false);
 
+  const isVip = isVipInfluencer(currentUserType);
+
+  // Filter tabs based on user type
+  const tabs = baseTabs.filter(tab => !tab.vipOnly || isVip);
+
+  // Filter collaborations based on selected tab
   const filteredCollabs =
     selectedTab === "all"
-      ? mockCollabs
+      ? mockCollabs.filter(c => c.status !== "declined")
       : mockCollabs.filter(
-          (collab) => getCollabCategory(collab.status) === selectedTab
+          (collab) => getCollabTab(collab.status, collab.userType) === selectedTab
         );
 
   // Count collabs per category
-  const categoryCounts = {
-    all: mockCollabs.length,
-    pending: mockCollabs.filter((c) => getCollabCategory(c.status) === "pending")
-      .length,
-    active: mockCollabs.filter((c) => getCollabCategory(c.status) === "active")
-      .length,
-    in_review: mockCollabs.filter(
-      (c) => getCollabCategory(c.status) === "in_review"
-    ).length,
-    completed: mockCollabs.filter(
-      (c) => getCollabCategory(c.status) === "completed"
-    ).length,
+  const tabCounts: Record<TabFilter, number> = {
+    all: mockCollabs.filter(c => c.status !== "declined").length,
+    invitations: mockCollabs.filter((c) => getCollabTab(c.status, c.userType) === "invitations").length,
+    applied: mockCollabs.filter((c) => getCollabTab(c.status, c.userType) === "applied").length,
+    active: mockCollabs.filter((c) => getCollabTab(c.status, c.userType) === "active").length,
+    in_review: mockCollabs.filter((c) => getCollabTab(c.status, c.userType) === "in_review").length,
+    completed: mockCollabs.filter((c) => getCollabTab(c.status, c.userType) === "completed").length,
+    declined: mockCollabs.filter((c) => getCollabTab(c.status, c.userType) === "declined").length,
   };
 
-  // Count invites vs applications in pending
-  const pendingInvites = mockCollabs.filter(
-    (c) => c.status === "invited"
-  ).length;
-  const pendingApplications = mockCollabs.filter(
-    (c) => c.status === "applied"
-  ).length;
+  // Get declined collabs for collapsed section
+  const declinedCollabs = mockCollabs.filter(
+    (c) => getCollabTab(c.status, c.userType) === "declined"
+  );
+
+  // Get color value for tab
+  const getTabColor = (color: string) => {
+    switch (color) {
+      case "brand-magenta": return "#EA33E9";
+      case "brand-cyan": return "#75FBDE";
+      case "yellow-400": return "#facc15";
+      case "blue-400": return "#60a5fa";
+      case "orange-400": return "#fb923c";
+      case "green-400": return "#4ade80";
+      case "red-400": return "#f87171";
+      default: return "#75FBDE";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black pb-24">
@@ -104,7 +124,7 @@ export default function CollabsPage() {
           <div className="hide-scrollbar flex gap-2 overflow-x-auto px-6 py-4">
             {tabs.map((tab) => {
               const isSelected = selectedTab === tab.id;
-              const count = categoryCounts[tab.id];
+              const count = tabCounts[tab.id];
 
               return (
                 <button
@@ -112,37 +132,28 @@ export default function CollabsPage() {
                   onClick={() => setSelectedTab(tab.id)}
                   className={`flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
                     isSelected
-                      ? `bg-${tab.color} text-black`
+                      ? "text-black"
                       : "border border-gray-700 bg-gray-900 text-gray-300 hover:border-gray-600"
                   }`}
                   style={
                     isSelected
-                      ? {
-                          backgroundColor:
-                            tab.color === "brand-cyan"
-                              ? "#75FBDE"
-                              : tab.color === "yellow-400"
-                              ? "#facc15"
-                              : tab.color === "blue-400"
-                              ? "#60a5fa"
-                              : tab.color === "orange-400"
-                              ? "#fb923c"
-                              : "#4ade80",
-                        }
+                      ? { backgroundColor: getTabColor(tab.color) }
                       : undefined
                   }
                 >
                   {tab.icon}
                   {tab.label}
-                  <span
-                    className={`rounded-full px-1.5 py-0.5 text-xs ${
-                      isSelected
-                        ? "bg-black/20 text-black"
-                        : "bg-gray-800 text-gray-400"
-                    }`}
-                  >
-                    {count}
-                  </span>
+                  {count > 0 && (
+                    <span
+                      className={`rounded-full px-1.5 py-0.5 text-xs ${
+                        isSelected
+                          ? "bg-black/20 text-black"
+                          : "bg-gray-800 text-gray-400"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -154,45 +165,44 @@ export default function CollabsPage() {
       <div className="mx-auto max-w-lg space-y-4 px-6 py-6">
         {/* Stats Summary */}
         <div className="grid grid-cols-4 gap-3 rounded-2xl border border-gray-800 bg-gray-900/50 p-4">
+          {isVip && (
+            <div className="text-center">
+              <div className="mb-1 flex items-center justify-center gap-1 text-xl font-bold text-brand-magenta">
+                <Mail className="h-4 w-4" />
+                {tabCounts.invitations}
+              </div>
+              <div className="text-[10px] text-gray-500">Invites</div>
+            </div>
+          )}
           <div className="text-center">
             <div className="mb-1 flex items-center justify-center gap-1 text-xl font-bold text-yellow-400">
               <Send className="h-4 w-4" />
-              {pendingApplications}
+              {tabCounts.applied}
             </div>
             <div className="text-[10px] text-gray-500">Applied</div>
           </div>
           <div className="text-center">
-            <div className="mb-1 flex items-center justify-center gap-1 text-xl font-bold text-brand-magenta">
-              <Mail className="h-4 w-4" />
-              {pendingInvites}
-            </div>
-            <div className="text-[10px] text-gray-500">Invites</div>
-          </div>
-          <div className="text-center">
             <div className="mb-1 flex items-center justify-center gap-1 text-xl font-bold text-blue-400">
               <Sparkles className="h-4 w-4" />
-              {categoryCounts.active}
+              {tabCounts.active}
             </div>
             <div className="text-[10px] text-gray-500">Active</div>
           </div>
           <div className="text-center">
             <div className="mb-1 flex items-center justify-center gap-1 text-xl font-bold text-green-400">
               <CheckCircle className="h-4 w-4" />
-              {categoryCounts.completed}
+              {tabCounts.completed}
             </div>
             <div className="text-[10px] text-gray-500">Done</div>
           </div>
         </div>
 
         {/* Section Title */}
-        {selectedTab !== "all" && (
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-white">
-              {tabs.find((t) => t.id === selectedTab)?.label} (
-              {filteredCollabs.length})
-            </h2>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-white">
+            {tabs.find((t) => t.id === selectedTab)?.label || "All"} ({filteredCollabs.length})
+          </h2>
+        </div>
 
         {/* Collabs List */}
         {filteredCollabs.length > 0 ? (
@@ -202,10 +212,13 @@ export default function CollabsPage() {
             ))}
           </div>
         ) : (
-          <div className="flex min-h-[40vh] flex-col items-center justify-center text-center">
+          <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
             <div className="mb-4 opacity-30">
-              {selectedTab === "pending" && (
-                <Clock className="h-16 w-16 text-yellow-400" />
+              {selectedTab === "invitations" && (
+                <Mail className="h-16 w-16 text-brand-magenta" />
+              )}
+              {selectedTab === "applied" && (
+                <Send className="h-16 w-16 text-yellow-400" />
               )}
               {selectedTab === "active" && (
                 <Sparkles className="h-16 w-16 text-blue-400" />
@@ -216,25 +229,58 @@ export default function CollabsPage() {
               {selectedTab === "completed" && (
                 <CheckCircle className="h-16 w-16 text-green-400" />
               )}
-              {selectedTab === "all" && (
-                <Sparkles className="h-16 w-16 text-brand-cyan" />
-              )}
             </div>
             <h3 className="mb-2 text-xl font-bold text-white">
-              No {selectedTab !== "all" ? selectedTab.replace("_", " ") : ""}{" "}
-              collaborations
+              No {selectedTab.replace("_", " ")} collaborations
             </h3>
             <p className="text-gray-400">
-              {selectedTab === "all"
-                ? "Start applying to offers to see them here"
-                : selectedTab === "pending"
-                ? "No pending applications or invitations"
+              {selectedTab === "invitations"
+                ? "No pending invitations from businesses"
+                : selectedTab === "applied"
+                ? "No applications waiting for response"
                 : selectedTab === "active"
                 ? "No active collaborations right now"
                 : selectedTab === "in_review"
                 ? "No content waiting for review"
                 : "Complete your first collaboration!"}
             </p>
+          </div>
+        )}
+
+        {/* Declined Section (Collapsed by default) */}
+        {declinedCollabs.length > 0 && (
+          <div className="mt-8">
+            <button
+              onClick={() => setShowDeclined(!showDeclined)}
+              className="flex w-full items-center justify-between rounded-xl border border-gray-800 bg-gray-900/50 px-4 py-3 text-left transition-colors hover:bg-gray-900"
+            >
+              <div className="flex items-center gap-2">
+                <XCircle className="h-4 w-4 text-red-400" />
+                <span className="text-sm font-medium text-gray-400">
+                  Declined ({declinedCollabs.length})
+                </span>
+              </div>
+              {showDeclined ? (
+                <ChevronUp className="h-4 w-4 text-gray-500" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              )}
+            </button>
+
+            {showDeclined && (
+              <div className="mt-4 space-y-4">
+                {declinedCollabs.map((collab) => (
+                  <div key={collab.id} className="opacity-60">
+                    <CollabCard collab={collab} />
+                    {collab.declineReason && (
+                      <div className="mt-2 rounded-lg bg-red-400/10 px-3 py-2 text-sm text-red-400">
+                        Reason: {collab.declineReason}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

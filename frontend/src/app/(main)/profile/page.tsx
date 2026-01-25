@@ -1,106 +1,159 @@
 "use client";
 
 import TierBadge from "@/components/TierBadge";
-import { getProgressToNextTier, getTierInfo, TIER_CONFIG } from "@/lib/tiers";
+import PhotoGallery from "@/components/profile/PhotoGallery";
+import ConnectedAccounts from "@/components/profile/ConnectedAccounts";
+import CreatorCategories from "@/components/profile/CreatorCategories";
+import { getProgressToNextTier, getTierInfo } from "@/lib/tiers";
 import {
-  User,
   Settings,
   ChevronRight,
   Star,
   TrendingUp,
   Award,
   Heart,
-  Camera,
   Bell,
   HelpCircle,
   LogOut,
   Shield,
   Zap,
+  MapPin,
 } from "lucide-react";
 import Link from "next/link";
 
 // Format number consistently to avoid hydration mismatch
 function formatNumber(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  return num.toString();
 }
 
 export default function ProfilePage() {
   // Example user data
-  const userCollabs = 7;
-  const userKarma = 850;
-  const userReach = 2500;
-  const userRating = 4.8;
-  const progress = getProgressToNextTier(userCollabs);
-  const currentTierInfo = getTierInfo(progress.currentTier);
+  const userData = {
+    name: "Sofia Martinez",
+    username: "sofia.creates",
+    location: "Miami, FL",
+    bio: "Food & Travel Creator | Exploring the world one bite at a time",
+    collabs: 7,
+    karma: 850,
+    reach: 125000,
+    rating: 4.8,
+    photos: [
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80",
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+    ],
+    socialAccounts: [
+      {
+        platform: "instagram" as const,
+        username: "sofia.creates",
+        followers: 125000,
+        engagementRate: 4.8,
+        verified: true,
+        connected: true,
+      },
+      {
+        platform: "tiktok" as const,
+        username: "sofiacreates",
+        followers: 89000,
+        engagementRate: 6.2,
+        verified: false,
+        connected: true,
+      },
+      {
+        platform: "youtube" as const,
+        connected: false,
+      },
+    ],
+    categories: ["food", "travel", "lifestyle", "photography"],
+  };
+
+  const progress = getProgressToNextTier(userData.collabs);
+
+  const handleAddPhoto = () => {
+    // TODO: Implement photo upload modal
+    console.log("Add photo clicked");
+  };
+
+  const handleConnectAccount = (platform: string) => {
+    // TODO: Implement OAuth flow
+    console.log("Connect", platform);
+  };
+
+  const handleEditCategories = () => {
+    // TODO: Implement category edit modal
+    console.log("Edit categories clicked");
+  };
 
   return (
     <div className="min-h-screen bg-black pb-24">
-      {/* Header */}
-      <header className="relative overflow-hidden border-b border-gray-800 bg-gradient-to-br from-gray-900 to-black px-6 pb-8 pt-12">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan via-transparent to-brand-magenta" />
-        </div>
+      {/* Main Container - Centered with max-width 500px */}
+      <div className="mx-auto max-w-[500px] px-6 pt-6">
+        {/* Photo Gallery Section */}
+        <div className="relative mb-6">
+          <PhotoGallery
+            photos={userData.photos}
+            onAddPhoto={handleAddPhoto}
+            editable={true}
+          />
 
-        <div className="relative mx-auto max-w-lg">
-          {/* Settings Button */}
+          {/* Settings Button - Floating */}
           <Link
             href="/profile/settings"
-            className="absolute right-0 top-0 flex h-10 w-10 items-center justify-center rounded-full bg-gray-800/50 transition-colors hover:bg-gray-800"
+            className="absolute -right-2 top-0 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 transition-colors hover:bg-gray-800"
           >
             <Settings className="h-5 w-5 text-gray-400" />
           </Link>
-
-          {/* Profile Avatar */}
-          <div className="mb-4 flex justify-center">
-            <div className="relative">
-              <div className="h-28 w-28 rounded-full bg-gradient-to-br from-brand-cyan to-brand-magenta p-1">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-black">
-                  <User className="h-12 w-12 text-white" />
-                </div>
-              </div>
-              {/* Camera Button */}
-              <button className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-brand-cyan text-black transition-transform hover:scale-110">
-                <Camera className="h-4 w-4" />
-              </button>
-            </div>
+        </div>
+        {/* Name, Username, Location */}
+        <div className="mb-6 text-center">
+          <div className="mb-2 flex items-center justify-center gap-2">
+            <h1 className="text-2xl font-bold text-white">{userData.name}</h1>
+            <TierBadge tier={progress.currentTier} size="sm" />
           </div>
-
-          {/* User Info */}
-          <div className="text-center">
-            <h1 className="mb-1 text-2xl font-bold text-white">Creator Name</h1>
-            <p className="mb-4 text-sm text-gray-400">@creator_username</p>
-
-            {/* Tier Badge */}
-            <div className="flex justify-center">
-              <TierBadge tier={progress.currentTier} size="lg" variant="gradient" />
-            </div>
+          <p className="mb-1 text-gray-400">@{userData.username}</p>
+          <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
+            <MapPin className="h-3.5 w-3.5" />
+            {userData.location}
           </div>
         </div>
-      </header>
 
-      <div className="mx-auto max-w-lg px-6 py-6">
         {/* Stats Grid */}
         <div className="mb-6 grid grid-cols-4 gap-3">
           <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
-            <div className="mb-1 text-xl font-bold text-brand-cyan">{userCollabs}</div>
+            <div className="mb-1 text-xl font-bold text-brand-cyan">{userData.collabs}</div>
             <div className="text-xs text-gray-500">Collabs</div>
           </div>
           <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
-            <div className="mb-1 text-xl font-bold text-brand-magenta">{userKarma}</div>
+            <div className="mb-1 text-xl font-bold text-brand-magenta">{userData.karma}</div>
             <div className="text-xs text-gray-500">Karma</div>
           </div>
           <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
-            <div className="mb-1 text-xl font-bold text-brand-purple">{formatNumber(userReach)}</div>
+            <div className="mb-1 text-xl font-bold text-brand-purple">{formatNumber(userData.reach)}</div>
             <div className="text-xs text-gray-500">Reach</div>
           </div>
           <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
             <div className="mb-1 flex items-center justify-center gap-1 text-xl font-bold text-yellow-400">
               <Star className="h-4 w-4" fill="currentColor" />
-              {userRating}
+              {userData.rating}
             </div>
             <div className="text-xs text-gray-500">Rating</div>
           </div>
+        </div>
+
+        {/* Connected Accounts */}
+        <div className="mb-6">
+          <ConnectedAccounts
+            accounts={userData.socialAccounts}
+            onConnect={handleConnectAccount}
+          />
         </div>
 
         {/* Tier Progress Card */}
@@ -125,14 +178,14 @@ export default function ProfilePage() {
                   className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${progress.progress}%`,
-                    backgroundImage: "linear-gradient(90deg, var(--brand-cyan) 0%, var(--brand-blue) 100%)",
+                    backgroundImage: "linear-gradient(90deg, #75FBDE 0%, #1020E0 100%)",
                   }}
                 />
               </div>
 
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">
-                  {userCollabs} / {getTierInfo(progress.nextTier).minCollabs} collabs
+                  {userData.collabs} / {getTierInfo(progress.nextTier).minCollabs} collabs
                 </span>
                 <span className="font-semibold text-brand-cyan">
                   {progress.progress}%
@@ -182,6 +235,15 @@ export default function ProfilePage() {
               <span className="text-gray-300">Enhanced profile visibility</span>
             </div>
           </div>
+        </div>
+
+        {/* Creator Categories */}
+        <div className="mb-6">
+          <CreatorCategories
+            categories={userData.categories}
+            onEdit={handleEditCategories}
+            editable={true}
+          />
         </div>
 
         {/* Menu Items */}

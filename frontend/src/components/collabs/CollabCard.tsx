@@ -93,7 +93,7 @@ const statusConfig: Record<
     label: "Visited",
     Icon: MapPin,
   },
-  content_submitted: {
+  in_review: {
     color: "text-orange-400",
     bgColor: "bg-orange-400/10",
     borderColor: "border-orange-400/30",
@@ -107,11 +107,11 @@ const statusConfig: Record<
     label: "Completed",
     Icon: CheckCircle,
   },
-  rejected: {
+  declined: {
     color: "text-red-400",
     bgColor: "bg-red-400/10",
     borderColor: "border-red-400/30",
-    label: "Rejected",
+    label: "Declined",
     Icon: Clock,
   },
 };
@@ -122,20 +122,21 @@ const progressSteps: CollabStatus[] = [
   "accepted",
   "scheduled",
   "visited",
-  "content_submitted",
+  "in_review",
   "completed",
 ];
 
-function getProgressIndex(status: CollabStatus, isInfluencer: boolean): number {
+function getProgressIndex(status: CollabStatus): number {
   if (status === "invited") return 0;
-  if (status === "rejected") return -1;
+  if (status === "declined") return -1;
   return progressSteps.indexOf(status);
 }
 
 export default function CollabCard({ collab }: CollabCardProps) {
   const config = statusConfig[collab.status];
   const BusinessIcon = businessIconMap[collab.businessLogo] || AllCategoriesIcon;
-  const progressIndex = getProgressIndex(collab.status, collab.isInfluencer);
+  const progressIndex = getProgressIndex(collab.status);
+  const isVip = collab.userType === "vip_influencer";
 
   return (
     <Link href={`/collab/${collab.id}`}>
@@ -161,11 +162,11 @@ export default function CollabCard({ collab }: CollabCardProps) {
             </span>
           </div>
 
-          {/* Influencer Badge */}
-          {collab.isInfluencer && (
+          {/* VIP Influencer Badge */}
+          {isVip && collab.status === "invited" && (
             <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-brand-magenta px-2.5 py-1 backdrop-blur-sm">
               <Star className="h-3 w-3 text-white" />
-              <span className="text-[10px] font-bold text-white">INVITE</span>
+              <span className="text-[10px] font-bold text-white">VIP INVITE</span>
             </div>
           )}
 
@@ -205,7 +206,7 @@ export default function CollabCard({ collab }: CollabCardProps) {
           </div>
 
           {/* Progress Bar */}
-          {collab.status !== "rejected" && (
+          {collab.status !== "declined" && (
             <div className="mb-3">
               <div className="flex items-center justify-between gap-1">
                 {[0, 1, 2, 3, 4, 5].map((step) => (
@@ -222,7 +223,7 @@ export default function CollabCard({ collab }: CollabCardProps) {
                 ))}
               </div>
               <div className="mt-1 flex justify-between text-[10px] text-gray-600">
-                <span>{collab.isInfluencer ? "Invited" : "Applied"}</span>
+                <span>{collab.status === "invited" ? "Invited" : "Applied"}</span>
                 <span>Completed</span>
               </div>
             </div>
