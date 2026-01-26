@@ -101,4 +101,9 @@ class Collaboration(Base):
     application = relationship("Application", back_populates="collaboration")
     creator = relationship("User", back_populates="collaborations_as_creator", foreign_keys=[creator_id])
     business = relationship("User", back_populates="collaborations_as_business", foreign_keys=[business_id])
-    submission = relationship("ContentSubmission", back_populates="collaboration")
+
+    # Relación con ContentSubmission (bidireccional)
+    # - submissions: todas las submissions enviadas para esta colaboración
+    # - final_submission: la submission aprobada/final (puede ser None)
+    submissions = relationship("ContentSubmission", back_populates="collaboration", foreign_keys="ContentSubmission.collaboration_id")
+    final_submission = relationship("ContentSubmission", foreign_keys=[submission_id], post_update=True)

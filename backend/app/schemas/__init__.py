@@ -21,7 +21,7 @@ class AuthProvider(str, Enum):
 class UserRegisterEmail(BaseModel):
     """Registro con Email & Contraseña"""
     email: EmailStr
-    password: str = Field(..., min_length=8, max_length=100)
+    password: str = Field(..., min_length=8, max_length=72)  # Bcrypt limit
     confirm_password: str
     full_name: str
     user_type: UserType

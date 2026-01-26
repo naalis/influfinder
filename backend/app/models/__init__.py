@@ -45,11 +45,13 @@ class User(Base):
     # Relaciones
     profile = relationship("Profile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     offers = relationship("Offer", back_populates="business", foreign_keys="Offer.business_id")
-    applications = relationship("Application", back_populates="creator")
+    applications = relationship("Application", back_populates="creator", foreign_keys="Application.creator_id")
     collaborations_as_creator = relationship("Collaboration", back_populates="creator", foreign_keys="Collaboration.creator_id")
     collaborations_as_business = relationship("Collaboration", back_populates="business", foreign_keys="Collaboration.business_id")
-    submissions = relationship("ContentSubmission", back_populates="creator")
-    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
+    submissions = relationship("ContentSubmission", back_populates="creator", foreign_keys="ContentSubmission.creator_id")
+    submissions_reviewed = relationship("ContentSubmission", foreign_keys="ContentSubmission.reviewed_by")
+    notifications = relationship("Notification", back_populates="user", foreign_keys="Notification.user_id", cascade="all, delete-orphan")
+    notifications_triggered = relationship("Notification", foreign_keys="Notification.related_user_id")
     messages_sent = relationship("Message", back_populates="sender", foreign_keys="Message.sender_id")
     messages_received = relationship("Message", back_populates="recipient", foreign_keys="Message.recipient_id")
 

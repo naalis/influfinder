@@ -6,19 +6,32 @@ import httpx
 from app.config import settings
 
 # Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Configurar bcrypt sin el test de detección de bugs que usa contraseñas largas
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__ident="2b",  # Usar bcrypt 2b (más moderno)
+    bcrypt__min_rounds=12,  # Mínimo 12 rounds
+)
 
 class SecurityService:
     
     @staticmethod
     def hash_password(password: str) -> str:
         """Hashear contraseña con bcrypt"""
-        return pwd_context.hash(password)
+        # Bcrypt tiene un límite de 72 bytes, truncar si es necesario
+        # Esto previene el error: "password cannot be longer than 72 bytes"
+        password_bytes = password.encode('utf-8')[:72]
+        password_truncated = password_bytes.decode('utf-8', errors='ignore')
+        return pwd_context.hash(password_truncated)
     
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """Verificar contraseña"""
-        return pwd_context.verify(plain_password, hashed_password)
+        # Aplicar el mismo truncado que en hash_password
+        password_bytes = plain_password.encode('utf-8')[:72]
+        password_truncated = password_bytes.decode('utf-8', errors='ignore')
+        return pwd_context.verify(password_truncated, hashed_password)
     
     @staticmethod
     def create_access_token(

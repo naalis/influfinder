@@ -44,6 +44,6 @@ class ContentSubmission(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relaciones
-    collaboration = relationship("Collaboration", back_populates="submission")
+    collaboration = relationship("Collaboration", back_populates="submissions", foreign_keys=[collaboration_id])
     creator = relationship("User", foreign_keys=[creator_id])
     reviewer = relationship("User", foreign_keys=[reviewed_by])

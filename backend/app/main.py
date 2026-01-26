@@ -5,7 +5,9 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.database import init_db, close_db
-# from app.api.v1 import auth  # TODO: Enable when auth endpoints are complete
+from app.api.v1 import auth
+from app.api.v1.users import router as users_router
+from app.api.v1.categories import router as categories_router
 from app.api.v1.offers import router as offers_router
 from app.api.v1.collaborations import router as collaborations_router
 from app.api.v1.submissions import router as submissions_router
@@ -47,7 +49,9 @@ app.add_middleware(
 )
 
 # Include routers
-# app.include_router(auth.router)  # TODO: Enable when auth endpoints are complete
+app.include_router(auth.router)
+app.include_router(users_router)
+app.include_router(categories_router)
 app.include_router(offers_router)
 app.include_router(collaborations_router)
 app.include_router(submissions_router)
