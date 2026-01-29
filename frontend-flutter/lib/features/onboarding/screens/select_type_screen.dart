@@ -31,7 +31,7 @@ class _SelectTypeScreenState extends State<SelectTypeScreen> {
                 const SizedBox(height: 16),
                 // Back button
                 IconButton(
-                  onPressed: () => context.go('/onboarding'),
+                  onPressed: () => context.pop(),
                   icon: const Icon(
                     LucideIcons.arrowLeft,
                     color: AppColors.textPrimary,
@@ -82,10 +82,11 @@ class _SelectTypeScreenState extends State<SelectTypeScreen> {
                   text: 'Continue',
                   onPressed: _selectedType != null
                       ? () {
-                          final type = _selectedType == UserType.creator
-                              ? 'creator'
-                              : 'business';
-                          context.go('/onboarding/location?type=$type');
+                          if (_selectedType == UserType.creator) {
+                            context.push('/onboarding/location?type=creator');
+                          } else {
+                            context.push('/onboarding/business');
+                          }
                         }
                       : null,
                   gradient: _selectedType == UserType.business

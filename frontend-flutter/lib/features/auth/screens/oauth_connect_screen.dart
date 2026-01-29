@@ -6,6 +6,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/models/social_account_model.dart';
+import 'oauth_webview_screen.dart';
 
 class OAuthConnectScreen extends StatefulWidget {
   final SocialPlatform platform;
@@ -106,20 +107,32 @@ class _OAuthConnectScreenState extends State<OAuthConnectScreen> {
   Future<void> _handleConnect() async {
     setState(() => _isConnecting = true);
 
-    final authService = context.read<AuthService>();
-    final success = await authService.connectSocialAccount(widget.platform);
+    // Open WebView for real OAuth flow
+    final oauthSuccess = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => OAuthWebViewScreen(platform: widget.platform),
+      ),
+    ) ?? false;
 
-    if (success && mounted) {
-      setState(() {
-        _isConnecting = false;
-        _isSuccess = true;
-      });
+    if (!mounted) return;
 
-      await Future.delayed(const Duration(milliseconds: 800));
+    if (oauthSuccess) {
+      // Update local state via AuthService
+      final authService = context.read<AuthService>();
+      await authService.connectSocialAccount(widget.platform);
 
       if (mounted) {
-        widget.onSuccess?.call();
-        Navigator.of(context).pop(true);
+        setState(() {
+          _isConnecting = false;
+          _isSuccess = true;
+        });
+
+        await Future.delayed(const Duration(milliseconds: 800));
+
+        if (mounted) {
+          widget.onSuccess?.call();
+          Navigator.of(context).pop(true);
+        }
       }
     } else if (mounted) {
       setState(() => _isConnecting = false);

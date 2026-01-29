@@ -1,7 +1,11 @@
 import 'package:go_router/go_router.dart';
 import '../../features/onboarding/screens/screens.dart';
+import '../../features/onboarding/screens/coming_soon_screen.dart';
+import '../../features/onboarding/screens/business_onboarding_screen.dart';
 import '../../features/offers/screens/offer_detail_screen.dart';
 import '../../features/auth/screens/oauth_connect_screen.dart';
+import '../../features/auth/screens/oauth_webview_screen.dart';
+import '../../features/auth/screens/signin_screen.dart';
 import '../widgets/main_shell.dart';
 import '../models/social_account_model.dart';
 
@@ -44,6 +48,25 @@ class AppRouter {
       GoRoute(
         path: '/onboarding/success',
         builder: (context, state) => const SuccessScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/business',
+        builder: (context, state) => const BusinessOnboardingScreen(),
+      ),
+
+      // Sign in (existing users)
+      GoRoute(
+        path: '/signin',
+        builder: (context, state) => const SignInScreen(),
+      ),
+
+      // Coming soon (country not available)
+      GoRoute(
+        path: '/coming-soon',
+        builder: (context, state) {
+          final country = state.uri.queryParameters['country'] ?? 'Unknown';
+          return ComingSoonScreen(detectedCountry: country);
+        },
       ),
 
       // Main app routes with shell
@@ -95,6 +118,19 @@ class AppRouter {
         builder: (context, state) => const OAuthConnectScreen(
           platform: SocialPlatform.youtube,
         ),
+      ),
+
+      // OAuth WebView
+      GoRoute(
+        path: '/oauth/webview/:platform',
+        builder: (context, state) {
+          final platformStr = state.pathParameters['platform'] ?? 'instagram';
+          final platform = SocialPlatform.values.firstWhere(
+            (p) => p.name == platformStr,
+            orElse: () => SocialPlatform.instagram,
+          );
+          return OAuthWebViewScreen(platform: platform);
+        },
       ),
     ],
   );

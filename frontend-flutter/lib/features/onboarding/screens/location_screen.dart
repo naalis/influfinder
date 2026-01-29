@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../core/constants/countries.dart';
+import '../../../core/services/location_service.dart';
 
 class LocationScreen extends StatefulWidget {
   final String userType;
@@ -69,13 +71,99 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void _detectLocation() async {
     setState(() => _isLoadingLocation = true);
-    // Simulate location detection
-    await Future.delayed(const Duration(seconds: 2));
+
+    final locationService = LocationService();
+    final result = await locationService.detectLocation();
+
+    if (!mounted) return;
+
+    setState(() => _isLoadingLocation = false);
+
+    if (result.permissionDenied) {
+      _showPermissionDeniedDialog();
+      return;
+    }
+
+    if (result.serviceDisabled) {
+      _showServiceDisabledDialog();
+      return;
+    }
+
+    if (result.error != null && result.country == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result.error!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check if country is allowed
+    if (!result.isAllowedCountry) {
+      context.go('/coming-soon?country=${Uri.encodeComponent(result.country ?? "Unknown")}');
+      return;
+    }
+
+    // Success - populate dropdowns
     setState(() {
-      _selectedCountry = 'Peru';
-      _selectedCity = 'Lima';
-      _isLoadingLocation = false;
+      _selectedCountry = result.country;
+      _selectedCity = result.city;
     });
+  }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text('Location Permission Required', style: AppTypography.h3),
+        content: Text(
+          'Please enable location permissions in your device settings to use this feature.',
+          style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textMuted)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Geolocator.openAppSettings();
+            },
+            child: Text('Open Settings', style: TextStyle(color: _accentColor)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showServiceDisabledDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text('Location Services Disabled', style: AppTypography.h3),
+        content: Text(
+          'Please enable location services on your device to use this feature.',
+          style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textMuted)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Geolocator.openLocationSettings();
+            },
+            child: Text('Open Settings', style: TextStyle(color: _accentColor)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -96,7 +184,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () => context.go('/onboarding/select-type'),
+                          onPressed: () => context.pop(),
                           icon: const Icon(
                             LucideIcons.arrowLeft,
                             color: AppColors.textPrimary,
@@ -276,12 +364,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: GradientButton(
                   text: 'Continue',
                   onPressed: _selectedCountry != null && _selectedCity != null
-                      ? () {
-                          final nextRoute = widget.userType == 'creator'
-                              ? '/onboarding/login'
-                              : '/onboarding/business/login';
-                          context.go(nextRoute);
-                        }
+                      ? () => context.push('/onboarding/login')
                       : null,
                   gradient: !_isCreator
                       ? const LinearGradient(

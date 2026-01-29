@@ -97,13 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   // Back button
                   IconButton(
-                    onPressed: () {
-                      if (_showEmailForm) {
-                        setState(() => _showEmailForm = false);
-                      } else {
-                        context.go('/onboarding/location?type=creator');
-                      }
-                    },
+                    onPressed: () => context.pop(),
                     icon: const Icon(
                       LucideIcons.arrowLeft,
                       color: AppColors.textPrimary,

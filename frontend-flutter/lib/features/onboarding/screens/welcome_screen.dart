@@ -72,7 +72,7 @@ class WelcomeScreen extends StatelessWidget {
                 // Get Started button
                 GradientButton(
                   text: 'Get Started',
-                  onPressed: () => context.go('/onboarding/select-type'),
+                  onPressed: () => context.push('/onboarding/select-type'),
                 )
                     .animate()
                     .fadeIn(delay: 700.ms, duration: 600.ms)
@@ -80,7 +80,7 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Login link
                 TextButton(
-                  onPressed: () => context.go('/onboarding/login'),
+                  onPressed: () => context.push('/signin'),
                   child: Text(
                     'Already have an account? Log in',
                     style: AppTypography.bodySmall.copyWith(

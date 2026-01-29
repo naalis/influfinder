@@ -370,6 +370,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _showSignOutDialog(BuildContext context, AuthService authService) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text('Sign Out', style: AppTypography.h4),
+        content: Text(
+          'Are you sure you want to sign out?',
+          style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text('Cancel', style: AppTypography.label.copyWith(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              await authService.logout();
+              if (context.mounted) {
+                context.go('/onboarding');
+              }
+            },
+            child: Text('Sign Out', style: AppTypography.label.copyWith(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTierProgress(
     UserProfile user,
     TierInfo tierInfo,
@@ -618,12 +648,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: LucideIcons.logOut,
           label: 'Sign Out',
           isDestructive: true,
-          onTap: () async {
-            await authService.logout();
-            if (context.mounted) {
-              context.go('/onboarding');
-            }
-          },
+          onTap: () => _showSignOutDialog(context, authService),
         ),
       ],
     );

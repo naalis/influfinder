@@ -45,5 +45,20 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Influfinder needs your location to show relevant opportunities nearby</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>influfinder</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.influfinder.app</string>
+		</dict>
+	</array>
 </dict>
 </plist>
