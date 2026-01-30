@@ -1,57 +1,30 @@
 # Pendientes - Influfinder
 
-## 🔴 Crítico / Alta Prioridad
+## ✅ Completado Recientemente
 
 ### Frontend Flutter - Geolocalización Real
 
-**Ubicación**: `frontend-flutter/lib/features/onboarding/screens/location_screen.dart:70-79`
+**Estado**: ✅ **IMPLEMENTADO** (2026-01-29)
 
-**Problema**:
-La función `_detectLocation()` actualmente está **simulada (mock)** y siempre devuelve:
-- País: Peru
-- Ciudad: Lima
+**Implementación**:
+- ✅ Paquetes instalados: `geolocator: ^10.1.0`, `geocoding: ^2.1.0`
+- ✅ Servicio de ubicación creado: `lib/core/services/location_service.dart`
+- ✅ Permisos de ubicación con manejo completo de errores
+- ✅ Geocoding reverso para obtener ciudad/país
+- ✅ Manejo de casos de error (permisos denegados, GPS desactivado)
+- ✅ Pantalla "Coming soon" para países no soportados
+- ✅ Integrado en `location_screen.dart` con UX mejorada
 
-**Código actual**:
-```dart
-void _detectLocation() async {
-  setState(() => _isLoadingLocation = true);
-  // Simulate location detection
-  await Future.delayed(const Duration(seconds: 2));
-  setState(() {
-    _selectedCountry = 'Peru';
-    _selectedCity = 'Lima';
-    _isLoadingLocation = false;
-  });
-}
-```
+**Archivos**:
+- `frontend-flutter/lib/core/services/location_service.dart`
+- `frontend-flutter/lib/features/onboarding/screens/location_screen.dart`
+- `frontend-flutter/lib/features/onboarding/screens/coming_soon_screen.dart`
 
-**Qué falta implementar**:
-1. Agregar paquetes de geolocalización:
-   ```yaml
-   dependencies:
-     geolocator: ^10.1.0
-     geocoding: ^2.1.0
-   ```
+---
 
-2. Pedir permisos de ubicación al usuario
+## 🔴 Crítico / Alta Prioridad
 
-3. Obtener coordenadas GPS del dispositivo
-
-4. Convertir coordenadas a ciudad/país mediante:
-   - Geocoding reverso (paquete `geocoding`)
-   - O llamar a API de Google Maps Geocoding
-   - O crear endpoint en backend para geocoding
-
-5. Manejar casos de error:
-   - Usuario niega permisos
-   - GPS no disponible
-   - Servicio de ubicación desactivado
-   - Timeout de detección
-
-**Impacto**:
-- Los usuarios no pueden usar su ubicación real
-- La experiencia de onboarding no es completa
-- Afecta la precisión de las ofertas mostradas (basadas en ubicación)
+*(No hay tareas críticas pendientes)*
 
 ---
 
